@@ -6,7 +6,7 @@
 import Foundation
 
 // MARK: - OpenWeatherAPI
-struct OpenWeatherAPI: Codable {
+struct CurrentWeatherAPI: Codable {
     let coord: Coord?
     let weather: [Weather]?
     let base: String?

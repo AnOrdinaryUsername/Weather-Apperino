@@ -13,26 +13,25 @@ extension Color {
 }
 
 struct ContentView: View {
-    @ObservedObject var test = LocationManager()
-    
+    @ObservedObject var location = DeviceLocation()
     
     var body: some View {
-        
         GeometryReader { geometry in
             VStack {
-                if test.isLoading {
-                    LoadingView(text: "Loading. . .")
-                } else {
-                    Text(test.weatherData?.name ?? "NO")
+                if let weatherInfo = location.weatherData {
+                    Text(weatherInfo.name ?? "NO")
                         .font(.system(size: 36, weight: .bold, design: .default))
                         .foregroundColor(Color.fgPrimary)
                         .padding(.bottom, 4)
                     
-                    Text(String(test.weatherData?.main?.temp ?? 0.0))
+                    Text(String(weatherInfo.main?.temp ?? 0.0))
                         .font(.system(size: 20, weight: .light, design: .default))
                         .foregroundColor(Color.fgPrimary)
+                } else {
+                    LoadingView()
                 }
             }.frame(width: geometry.size.width, height: geometry.size.height, alignment: .center).background(Color.black)
+            
         }
     }
 }

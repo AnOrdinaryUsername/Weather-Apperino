@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 typealias Geolocation = (latitude: Double, longitude: Double)
 
@@ -14,19 +15,11 @@ enum Location {
     case settlement(String)
 }
 
-class LocationManager: ObservableObject {
+class CurrentWeather {
     private let baseUrl = "https://api.openweathermap.org/data/2.5/weather"
     private let apiKey = "&appid=9d958a66e735735b56e66b55bba5ada5&units=imperial"
     
-    @Published var weatherData: OpenWeatherAPI? = nil
-    @Published var isLoading: Bool
-    
-    init() {
-        isLoading = true
-        grabWeatherData(at: .settlement("Bat Cave"))
-    }
-    
-    func grabWeatherData(at place: Location) {
+    func grabData(at place: Location, callback: @escaping (CurrentWeatherAPI) -> ()) {
         var url: URL
         
         switch place {
@@ -46,10 +39,9 @@ class LocationManager: ObservableObject {
         URLSession.shared.dataTask(with: url) {(data, response, error) in
                     do {
                         if let postData = data {
-                            let decodedData = try JSONDecoder().decode(OpenWeatherAPI.self, from: postData)
+                            let decodedData = try JSONDecoder().decode(CurrentWeatherAPI.self, from: postData)
                             DispatchQueue.main.async {
-                                self.weatherData = decodedData
-                                self.isLoading = false
+                                callback(decodedData)
                             }
                         } else {
                             print("No data")
