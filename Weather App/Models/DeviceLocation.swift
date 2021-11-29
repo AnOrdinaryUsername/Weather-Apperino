@@ -31,6 +31,13 @@ class DeviceLocation: NSObject, ObservableObject {
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
+    
+    func getWeather(at city: String) {
+        currentWeather.grabData(at: .settlement(city)) {
+            searchedCity in
+            self.weatherData = searchedCity
+        }
+    }
 }
 
 extension DeviceLocation: CLLocationManagerDelegate {
