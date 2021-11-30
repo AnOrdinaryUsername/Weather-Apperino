@@ -13,7 +13,7 @@ class DeviceLocation: NSObject, ObservableObject {
     private let manager = CLLocationManager()
     
     var location: CLLocation? {
-        willSet {
+        didSet {
             if let device = location?.coordinate {
                 let place = (device.latitude, device.longitude)
                 currentWeather.grabData(at: .geolocation(place)) { currentLocation in
@@ -22,7 +22,7 @@ class DeviceLocation: NSObject, ObservableObject {
             }
         }
     }
- 
+    
     override init() {
         super.init()
         manager.delegate = self
@@ -41,13 +41,12 @@ class DeviceLocation: NSObject, ObservableObject {
 }
 
 extension DeviceLocation: CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager,
-                          didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let lastLocation = locations.last else {
             return
         }
         self.location = lastLocation
-     }
+    }
     
     // If the user clicks "Do Not Allow" for there current location,
     // show the Bat Cave instead
@@ -58,5 +57,9 @@ extension DeviceLocation: CLLocationManagerDelegate {
                 self.weatherData = batCave
             }
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
     }
 }
