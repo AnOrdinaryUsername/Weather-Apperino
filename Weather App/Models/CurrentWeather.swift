@@ -51,4 +51,40 @@ class CurrentWeather {
                     }
         }.resume()
     }
+    
+    func grabForecastData(from url: String) {
+        print(url)
+        let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { data, response, error in
+            
+            guard let data = data, error == nil else {
+                print("Something went wrong")
+                return
+            }
+            
+            // have data
+            var result: Forecast?
+            do {
+                result = try JSONDecoder().decode(Forecast.self, from: data)
+            }
+            catch {
+                print(String(describing: error))
+            }
+            
+           /* guard let json = result else {
+                return
+            }*/
+            
+            guard let json = result else {
+                       print("test")
+                       return
+           }
+            DispatchQueue.main.sync {
+                print(json.lat)
+                print(json.lon)
+            }
+        })
+        task.resume()
+        
+    }
+
 }

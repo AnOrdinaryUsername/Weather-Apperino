@@ -1,11 +1,10 @@
-//
-//  ContentView.swift
-//  Weather App
-//
-//  Created by user198043 on 9/30/21.
-//
-
 import SwiftUI
+import CoreLocation
+import MapKit
+import Foundation
+
+let locationManager = CLLocationManager()
+
 
 extension Color {
     static let bg = Color("background")

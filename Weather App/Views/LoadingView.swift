@@ -33,3 +33,12 @@ struct LoadingView: View {
            }
        }
 }
+
+
+/* Some problems are:
+    - As I adjust the font size of 🌤 in the HStack, it shifts the other text and the 🌤 emoji goes off screen if it's too big
+    - Text() is just temporarily placeholders for the actual data
+    - Think there is a much more efficient way to position everything in the HStack including the HStack itself instead of
+        just constantly using Spacing()
+    - Overrall, things are a little too fixed. Things are moving relative to each other which I don't is what we want. It's probably preferred to be more dynamic and flexible
+ */
