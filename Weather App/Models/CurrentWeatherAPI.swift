@@ -8,23 +8,23 @@ import Foundation
 // MARK: - OpenWeatherAPI
 struct CurrentWeatherAPI: Codable {
     let coord: Coord?
-    let weather: [Weather]?
+    let weather: [Weather]
     let base: String?
-    let main: Main?
+    let main: Main
     let visibility: Int?
     let wind: Wind?
     let rain: Rain?
-    let clouds: Clouds?
-    let dt: Int?
-    let sys: Sys?
+    let clouds: Clouds
+    let dt: Int
+    let sys: Sys
     let timezone, id: Int?
-    let name: String?
-    let cod: Int?
+    let name: String
+    let cod: Int
 }
 
 // MARK: - Clouds
 struct Clouds: Codable {
-    let all: Int?
+    let all: Int
 }
 
 // MARK: - Coord
@@ -34,8 +34,8 @@ struct Coord: Codable {
 
 // MARK: - Main
 struct Main: Codable {
-    let temp, feelsLike, tempMin, tempMax: Double?
-    let pressure, humidity: Int?
+    let temp, feelsLike, tempMin, tempMax: Double
+    let pressure, humidity: Int
 
     enum CodingKeys: String, CodingKey {
         case temp
@@ -58,14 +58,14 @@ struct Rain: Codable {
 // MARK: - Sys
 struct Sys: Codable {
     let type, id: Int?
-    let country: String?
+    let country: String
     let sunrise, sunset: Int?
 }
 
 // MARK: - Weather
 struct Weather: Codable {
     let id: Int?
-    let main, weatherDescription, icon: String?
+    let main, weatherDescription, icon: String
 
     enum CodingKeys: String, CodingKey {
         case id, main

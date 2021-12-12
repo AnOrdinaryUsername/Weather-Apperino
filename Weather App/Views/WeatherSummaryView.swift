@@ -10,7 +10,6 @@ import SwiftUI
 struct WeatherSummaryView: View {
     @ObservedObject var location: DeviceLocation
     @State var city: String
-    @State var hasSearched: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -18,7 +17,6 @@ struct WeatherSummaryView: View {
                 HStack(spacing: 0) {
                     Button(action: {
                         self.location.getWeather(at: city)
-                        self.hasSearched = true
                     }) {
                         Image(systemName: "1.magnifyingglass")
                             .resizable()
@@ -39,7 +37,7 @@ struct WeatherSummaryView: View {
                     
                 }.frame(height: 45)
                 
-                if hasSearched {
+             
                     // TODO: Make this a button and add save button functionality
                     Button(action: {
                         print(location.weatherData?.coord)
@@ -53,7 +51,7 @@ struct WeatherSummaryView: View {
                         .foregroundColor(Color.pink)
                         .background(Color.saveBg)
                         .cornerRadius(8)
-                }
+                
                 
             }.padding(EdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20))
                 .background(Color.bg)
@@ -61,14 +59,23 @@ struct WeatherSummaryView: View {
             GeometryReader { geometry in
                 VStack {
                     if let weatherInfo = location.weatherData {
-                        Text(weatherInfo.name ?? "NO")
-                            .font(.system(size: 36, weight: .bold, design: .default))
-                            .foregroundColor(Color.fgPrimary)
-                            .padding(.bottom, 4)
                         
-                        Text(String(weatherInfo.main?.temp ?? 0.0))
-                            .font(.system(size: 20, weight: .light, design: .default))
-                            .foregroundColor(Color.fgPrimary)
+                        MainWeatherInfoView(city: weatherInfo.name, country: weatherInfo.sys.country, date: weatherInfo.dt, temperature: weatherInfo.main.temp, icon: weatherInfo.weather[0].icon)
+                        
+                        RowBoxView {
+                            VStack(spacing: 6) {
+                            RowView(columnOne: "High Temp", columnTwo: "\(weatherInfo.main.tempMax)°F")
+                            
+                            RowView(columnOne: "Low Temp", columnTwo: "\(weatherInfo.main.tempMin)°F")
+                            
+                            
+                            RowView(columnOne: "Humidity", columnTwo: "\(weatherInfo.main.humidity)%")
+                            
+                            
+                            RowView(columnOne: "Cloudiness", columnTwo: "\(weatherInfo.clouds.all)%")
+                            }.padding(6)
+                        }
+                        
                     } else {
                         LoadingView()
                     }

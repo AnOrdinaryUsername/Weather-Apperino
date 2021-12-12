@@ -9,9 +9,13 @@ import SwiftUI
 
 extension Color {
     static let bg = Color("background")
+    static let bgSecondary = Color(red: 0.11, green: 0.13, blue: 0.15)
     static let fgPrimary = Color(red: 0.96, green: 0.96, blue: 0.96)
+    static let fgSecondary = Color(red: 0.64, green: 0.65, blue: 0.7)
     static let searchBg = Color(red: 0.94, green: 0.94, blue: 0.94)
     static let saveBg = Color(red: 0.25, green: 0.27, blue: 0.48)
+    static let tabBg = Color(red: 0.24, green: 0.24, blue: 0.30)
+    static let tabUnselect = Color(red: 0.66, green: 0.68, blue: 0.76)
 }
 
 extension View {
@@ -33,19 +37,24 @@ struct RoundedCorner: Shape {
 struct ContentView: View {
     @ObservedObject var location = DeviceLocation()
     @State var city: String = ""
-    @State var hasSearched: Bool = false
     @State private var selection = 1
+    
+    init() {
+        UITabBar.appearance().isTranslucent = true
+        UITabBar.appearance().backgroundColor = UIColor(Color.tabBg)
+        UITabBar.appearance().unselectedItemTintColor = UIColor(Color.tabUnselect)
+    }
     
     var body: some View {
         TabView(selection: $selection) {
-            WeatherSummaryView(location: location, city: city, hasSearched: hasSearched).tabItem {
+            WeatherSummaryView(location: location, city: city).tabItem {
                 Label("Home", systemImage: "house")
             }.tag(1)
             
             SavedWeatherView().tabItem {
                 Label("Saved", systemImage: "heart.fill")
             }.tag(2)
-        }
+        }.accentColor(Color.fgPrimary)
     }
 }
 
