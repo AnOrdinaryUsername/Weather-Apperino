@@ -17,39 +17,32 @@ struct MainWeatherInfoView: View {
     var body: some View {
         VStack {
             GeometryReader { geometry in
-                ZStack(alignment: .topLeading) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("\(city), \(country)")
-                        .font(.system(size: 32))
+                ZStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("\(city), \(country)")
+                            .font(.system(size: 32))
+                        
+                        Text("\(createReadableDate(date))")
+                            .font(.system(size: 20, weight: .light))
+                            .foregroundColor(Color.fgSecondary)
+                        
+                        Text("\(roundAndRemoveDecimals(temperature))°F")
+                            .font(.system(size: 48))
+                    }.alignmentGuide(.leading, computeValue: { d in 120.0 })
+                        .foregroundColor(Color.fgPrimary)
+                        .padding(0)
+                        .zIndex(1)
+        
                     
-                    Text("\(createReadableDate(date))")
-                        .font(.system(size: 20, weight: .light))
-                        .foregroundColor(Color.fgSecondary)
+                    URLImageView(withURL: "https://openweathermap.org/img/wn/\(icon)@4x.png")
+                        .frame(width: 175, height: 175)
+                        .zIndex(-1)
+                        .offset(x: 12, y: 20)
                     
-                    Text("\(String(format: "%.0f°F", temperature.rounded()))")
-                        .font(.system(size: 48))
-                }.foregroundColor(Color.fgPrimary)
-                    .padding(0)
-                    .zIndex(1)
-              
-#if available
-                    AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(icon)@4x.png")).zIndex(-1).offset(x: -100)
-#else
-                URLImageView(withURL: "https://openweathermap.org/img/wn/\(icon)@4x.png").zIndex(-1)
-#endif
-                
                 }
             }
-        }.padding(20)
-    }
-    
-    func createReadableDate(_ unixTimestamp: Int) -> String {
-        let date = Date(timeIntervalSince1970: Double(unixTimestamp))
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "MM/dd/YY"
-        let formattedDate = dateFormatter.string(from: date)
-        
-        return formattedDate
+        }.frame(maxWidth: 350)
+            .padding(20)
+            .padding(.top, 0)
     }
 }

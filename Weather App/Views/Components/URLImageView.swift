@@ -16,7 +16,7 @@ struct URLImageView: View {
     }
 
     var body: some View {
-            Image(uiImage: image)
+        Image(uiImage: image.withBaselineOffset(fromBottom: 0))
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .onReceive(imageLoader.didChange) { data in

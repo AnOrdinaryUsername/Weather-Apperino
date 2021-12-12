@@ -13,11 +13,11 @@ struct RowView: View {
     
     var body: some View {
         HStack {
-            Text("\(columnOne)")
+            Text("\(columnOne)").foregroundColor(Color.fgPrimary)
             
-            Spacer().frame(maxWidth: .infinity)
+            Spacer()
             
-            Text("\(columnTwo)")
-        }
+            Text("\(columnTwo)").foregroundColor(Color.fgTertiary)
+        }.font(.system(size: 20))
     }
 }
