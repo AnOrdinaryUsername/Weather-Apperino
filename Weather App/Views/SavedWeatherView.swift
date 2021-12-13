@@ -44,7 +44,7 @@ struct SavedWeatherView: View {
             // Without .navigationViewStyle(), warnings will appear in the
             // console saying "Unable to satisfy constraints".
             // Fix from SO: https://stackoverflow.com/a/68019546
-        }.navigationViewStyle(.stack)
+        }.navigationViewStyle(StackNavigationViewStyle())
             .background(Color.bg)
             .edgesIgnoringSafeArea(.bottom)
     }
