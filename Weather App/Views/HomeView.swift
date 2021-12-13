@@ -20,7 +20,9 @@ struct HomeView: View {
                     
                     VStack(spacing: 40) {
                         
-                        if location.weatherData != nil && location.forecastData != nil {
+                        if let message = location.errorMessage {
+                            ErrorView(error: message)
+                        } else if location.weatherData != nil && location.forecastData != nil {
                             if let weatherInfo = location.weatherData {
                                 
                                 MainWeatherInfoView(city: weatherInfo.name, country: weatherInfo.sys.country, date: weatherInfo.dt, temperature: weatherInfo.main.temp, icon: weatherInfo.weather[0].icon)

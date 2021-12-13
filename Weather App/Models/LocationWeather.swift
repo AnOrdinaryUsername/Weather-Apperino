@@ -19,7 +19,7 @@ class LocationWeather {
     private let baseUrl = "https://api.openweathermap.org/data/2.5/"
     private let apiKey = "&appid=9d958a66e735735b56e66b55bba5ada5&units=imperial"
     
-    func grabCurrentWeatherData(at place: Location, callback: @escaping (CurrentWeatherAPI) -> ()) {
+    func grabCurrentWeatherData(at place: Location, callback: @escaping (CurrentWeatherAPI) -> (), errorCallback: @escaping (String) -> ()) {
         var url: URL
         
         switch place {
@@ -47,12 +47,13 @@ class LocationWeather {
                             print("No data")
                         }
                     } catch {
+                        errorCallback(error.localizedDescription)
                         print(String(describing: error))
                     }
         }.resume()
     }
     
-    func grabForecastData(at geoCoords: Geolocation, callback: @escaping (Forecast) -> ()) {
+    func grabForecastData(at geoCoords: Geolocation, callback: @escaping (Forecast) -> (), errorCallback: @escaping (String) -> ()) {
         let (latitude, longitude) = geoCoords
         let apiUrl = URL(string: "\(baseUrl)onecall?lat=\(latitude)&lon=\(longitude)&exclude=current,minutely,alerts\(apiKey)")!
         
@@ -71,6 +72,7 @@ class LocationWeather {
                 }
             }
             catch {
+                errorCallback(error.localizedDescription)
                 print(String(describing: error))
             }
         })

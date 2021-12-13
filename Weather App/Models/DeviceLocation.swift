@@ -10,20 +10,29 @@ import CoreLocation
 class DeviceLocation: NSObject, ObservableObject {
     @Published var weatherData: CurrentWeatherAPI? = nil
     @Published var forecastData: Forecast? = nil
+    @Published var errorMessage: String? = nil
     private let locationWeather = LocationWeather()
     private let manager = CLLocationManager()
     
     var location: CLLocation? {
         didSet {
+            self.errorMessage = nil
             if let device = location?.coordinate {
                 let place = (device.latitude, device.longitude)
-                locationWeather.grabCurrentWeatherData(at: .geolocation(place)) { currentLocation in
+                locationWeather.grabCurrentWeatherData(at: .geolocation(place), callback: { currentLocation in
                     self.weatherData = currentLocation
-                }
-                locationWeather.grabForecastData(at: place) {
+                }, errorCallback: {
+                    error in
+                    self.errorMessage = error
+                })
+                
+                locationWeather.grabForecastData(at: place, callback: {
                     forecast in
                     self.forecastData = forecast
-                }
+                }, errorCallback: {
+                    error in
+                    self.errorMessage = error
+                })
             }
         }
     }
@@ -38,15 +47,21 @@ class DeviceLocation: NSObject, ObservableObject {
     }
     
     func getWeather(at city: String) {
-        locationWeather.grabCurrentWeatherData(at: .settlement(city)) {
+        locationWeather.grabCurrentWeatherData(at: .settlement(city), callback: {
             searchedCity in
             self.weatherData = searchedCity
-        }
+        }, errorCallback: {
+            error in
+            self.errorMessage = error
+        })
         
-        locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon)) {
+        locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon), callback: {
             forecast in
             self.forecastData = forecast
-        }
+        }, errorCallback: {
+            error in
+            self.errorMessage = error
+        })
     }
 }
 
@@ -62,15 +77,21 @@ extension DeviceLocation: CLLocationManagerDelegate {
     // show the Bat Cave instead
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if (status == .denied) {
-            locationWeather.grabCurrentWeatherData(at: .settlement("Bat Cave")) {
+            locationWeather.grabCurrentWeatherData(at: .settlement("Bat Cave"), callback: {
                 batCave in
                 self.weatherData = batCave
-            }
+            }, errorCallback: {
+                error in
+                self.errorMessage = error
+            })
             
-            locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon)) {
+            locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon), callback: {
                 forecast in
                 self.forecastData = forecast
-            }
+            }, errorCallback: {
+                error in
+                self.errorMessage = error
+            })
         }
     }
     
