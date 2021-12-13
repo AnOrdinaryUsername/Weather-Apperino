@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct RowView: View {
-    var columnOne: String
-    var columnTwo: String
+    var left: String
+    var right: String
     
     var body: some View {
         HStack {
-            Text("\(columnOne)").foregroundColor(Color.fgPrimary)
+            Text("\(left)").foregroundColor(Color.fgPrimary)
             
             Spacer()
             
-            Text("\(columnTwo)").foregroundColor(Color.fgTertiary)
+            Text("\(right)").foregroundColor(Color.fgTertiary)
         }.font(.system(size: 20))
     }
 }

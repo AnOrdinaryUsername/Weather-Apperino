@@ -9,15 +9,20 @@ import CoreLocation
 
 class DeviceLocation: NSObject, ObservableObject {
     @Published var weatherData: CurrentWeatherAPI? = nil
-    private let currentWeather = CurrentWeather()
+    @Published var forecastData: Forecast? = nil
+    private let locationWeather = LocationWeather()
     private let manager = CLLocationManager()
     
     var location: CLLocation? {
         didSet {
             if let device = location?.coordinate {
                 let place = (device.latitude, device.longitude)
-                currentWeather.grabData(at: .geolocation(place)) { currentLocation in
+                locationWeather.grabCurrentWeatherData(at: .geolocation(place)) { currentLocation in
                     self.weatherData = currentLocation
+                }
+                locationWeather.grabForecastData(at: place) {
+                    forecast in
+                    self.forecastData = forecast
                 }
             }
         }
@@ -33,9 +38,14 @@ class DeviceLocation: NSObject, ObservableObject {
     }
     
     func getWeather(at city: String) {
-        currentWeather.grabData(at: .settlement(city)) {
+        locationWeather.grabCurrentWeatherData(at: .settlement(city)) {
             searchedCity in
             self.weatherData = searchedCity
+        }
+        
+        locationWeather.grabForecastData(at: (self.weatherData!.coord!.lat!, self.weatherData!.coord!.lon!)) {
+            forecast in
+            self.forecastData = forecast
         }
     }
 }
@@ -52,9 +62,14 @@ extension DeviceLocation: CLLocationManagerDelegate {
     // show the Bat Cave instead
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if (status == .denied) {
-            currentWeather.grabData(at: .settlement("Bat Cave")) {
+            locationWeather.grabCurrentWeatherData(at: .settlement("Bat Cave")) {
                 batCave in
                 self.weatherData = batCave
+            }
+            
+            locationWeather.grabForecastData(at: (self.weatherData!.coord!.lat!, self.weatherData!.coord!.lon!)) {
+                forecast in
+                self.forecastData = forecast
             }
         }
     }

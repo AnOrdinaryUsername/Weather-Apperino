@@ -16,8 +16,7 @@ struct MainWeatherInfoView: View {
     
     var body: some View {
         VStack {
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
+            ZStack(alignment: .leading) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("\(city), \(country)")
                             .font(.system(size: 32))
@@ -32,17 +31,15 @@ struct MainWeatherInfoView: View {
                         .foregroundColor(Color.fgPrimary)
                         .padding(0)
                         .zIndex(1)
-        
                     
                     URLImageView(withURL: "https://openweathermap.org/img/wn/\(icon)@4x.png")
                         .frame(width: 175, height: 175)
-                        .zIndex(-1)
+                        .zIndex(0)
                         .offset(x: 12, y: 20)
                     
                 }
-            }
+            
         }.frame(maxWidth: 350)
-            .padding(20)
-            .padding(.top, 0)
+      
     }
 }

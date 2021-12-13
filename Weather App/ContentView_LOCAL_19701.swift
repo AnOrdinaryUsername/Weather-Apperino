@@ -1,10 +1,11 @@
+//
+//  ContentView.swift
+//  Weather App
+//
+//  Created by user198043 on 9/30/21.
+//
+
 import SwiftUI
-import CoreLocation
-import MapKit
-import Foundation
-
-let locationManager = CLLocationManager()
-
 
 extension Color {
     static let bg = Color("background")
@@ -34,18 +35,13 @@ struct RoundedCorner: Shape {
     }
 }
 
-let FIVE_MINUTES: Double = 300
-
 struct ContentView: View {
     @ObservedObject var location = DeviceLocation()
     @State var city: String = ""
     @State private var selection = 1
     
-    // Used to update current location every 5 minutes
-    let timer = Timer.publish(every: FIVE_MINUTES, on: .main, in: .common).autoconnect()
-    
     init() {
-        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().isTranslucent = true
         UITabBar.appearance().backgroundColor = UIColor(Color.tabBg)
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.tabUnselect)
     }
@@ -54,12 +50,7 @@ struct ContentView: View {
         TabView(selection: $selection) {
             WeatherSummaryView(location: location, city: city).tabItem {
                 Label("Home", systemImage: "house")
-            }.tag(1).onReceive(timer) { timer in
-                if let weather = location.weatherData {
-                    let currentLocation = weather.name
-                    location.getWeather(at: currentLocation)
-                }
-            }
+            }.tag(1)
             
             SavedWeatherView().tabItem {
                 Label("Saved", systemImage: "heart.fill")

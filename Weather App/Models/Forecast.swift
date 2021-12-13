@@ -24,8 +24,8 @@ struct Forecast: Codable {
     let lat, lon: Double
     let timezone: String?
     let timezoneOffset: Int?
-    let hourly: [Hourly]?
-    let daily: [Daily]?
+    let hourly: [Hourly]
+    let daily: [Daily]
 
     enum CodingKeys: String, CodingKey {
         case lat, lon, timezone
@@ -36,10 +36,10 @@ struct Forecast: Codable {
 
 // MARK: - Daily
 struct Daily: Codable {
-    let dt, sunrise, sunset, moonrise: Int?
+    let dt, sunrise, sunset, moonrise: Int
     let moonset: Int?
     let moonPhase: Double?
-    let temp: Temp?
+    let temp: Temp
     let feelsLike: FeelsLike?
     let pressure, humidity: Int?
     let dewPoint, windSpeed: Double?
@@ -66,7 +66,7 @@ struct Daily: Codable {
 
 // MARK: - FeelsLike
 struct FeelsLike: Codable {
-    let day, night, eve, morn: Double?
+    let day, night, eve, morn: Double
 }
 
 // MARK: - Temp
@@ -79,7 +79,7 @@ struct Temp: Codable {
 struct WeatherOut: Codable {
     let id: Int?
     let main: Master?
-    let weatherDescription: String?    // <-------- Now it's just a regular String
+    let weatherDescription: String?
     let icon: String?
 
     enum CodingKeys: String, CodingKey {
@@ -107,15 +107,8 @@ enum Description: String, Codable {
 }
 
 // MARK: - Hourly
-struct Hourly: Codable {
-    let dt: Int?
-    let temp, feelsLike: Double?
-    let pressure, humidity: Int?
-    let dewPoint, uvi: Double?
-}
-
-struct Weekly: Codable {
-    let dt: Int?
-    let temp: Double?
+struct Hourly: Codable, Hashable {
+    let dt: Int
+    let temp: Double
 }
 

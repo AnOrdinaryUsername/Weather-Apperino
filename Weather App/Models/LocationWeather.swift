@@ -15,23 +15,23 @@ enum Location {
     case settlement(String)
 }
 
-class CurrentWeather {
-    private let baseUrl = "https://api.openweathermap.org/data/2.5/weather"
+class LocationWeather {
+    private let baseUrl = "https://api.openweathermap.org/data/2.5/"
     private let apiKey = "&appid=9d958a66e735735b56e66b55bba5ada5&units=imperial"
     
-    func grabData(at place: Location, callback: @escaping (CurrentWeatherAPI) -> ()) {
+    func grabCurrentWeatherData(at place: Location, callback: @escaping (CurrentWeatherAPI) -> ()) {
         var url: URL
         
         switch place {
         case .geolocation(let geoCoords):
             let (latitude, longitude) = geoCoords
-            let apiUrl = "\(baseUrl)?lat=\(latitude)&lon=\(longitude)\(apiKey)"
+            let apiUrl = "\(baseUrl)weather?lat=\(latitude)&lon=\(longitude)\(apiKey)"
             url = URL(string: apiUrl)!
            
 
         case .settlement(let area):
             let areaWithNoSpaces = area.replacingOccurrences(of: " ", with: "%20")
-            let apiUrl = "\(baseUrl)?q=\(areaWithNoSpaces)\(apiKey)"
+            let apiUrl = "\(baseUrl)weather?q=\(areaWithNoSpaces)\(apiKey)"
             print(apiUrl)
             url = URL(string: apiUrl)!
         }
@@ -40,21 +40,23 @@ class CurrentWeather {
                     do {
                         if let postData = data {
                             let decodedData = try JSONDecoder().decode(CurrentWeatherAPI.self, from: postData)
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.sync {
                                 callback(decodedData)
                             }
                         } else {
                             print("No data")
                         }
                     } catch {
-                        print(error)
+                        print(String(describing: error))
                     }
         }.resume()
     }
     
-    func grabForecastData(from url: String) {
-        print(url)
-        let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { data, response, error in
+    func grabForecastData(at geoCoords: Geolocation, callback: @escaping (Forecast) -> ()) {
+        let (latitude, longitude) = geoCoords
+        let apiUrl = URL(string: "\(baseUrl)onecall?lat=\(latitude)&lon=\(longitude)&exclude=current,minutely,alerts\(apiKey)")!
+        
+        let task = URLSession.shared.dataTask(with: apiUrl, completionHandler: { data, response, error in
             
             guard let data = data, error == nil else {
                 print("Something went wrong")
@@ -62,25 +64,14 @@ class CurrentWeather {
             }
             
             // have data
-            var result: Forecast?
             do {
-                result = try JSONDecoder().decode(Forecast.self, from: data)
+                let result = try JSONDecoder().decode(Forecast.self, from: data)
+                DispatchQueue.main.sync {
+                    callback(result)
+                }
             }
             catch {
                 print(String(describing: error))
-            }
-            
-           /* guard let json = result else {
-                return
-            }*/
-            
-            guard let json = result else {
-                       print("test")
-                       return
-           }
-            DispatchQueue.main.sync {
-                print(json.lat)
-                print(json.lon)
             }
         })
         task.resume()

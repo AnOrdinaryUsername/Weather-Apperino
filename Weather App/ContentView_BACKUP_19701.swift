@@ -34,32 +34,23 @@ struct RoundedCorner: Shape {
     }
 }
 
-let FIVE_MINUTES: Double = 300
-
 struct ContentView: View {
     @ObservedObject var location = DeviceLocation()
     @State var city: String = ""
     @State private var selection = 1
     
-    // Used to update current location every 5 minutes
-    let timer = Timer.publish(every: FIVE_MINUTES, on: .main, in: .common).autoconnect()
-    
     init() {
-        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().isTranslucent = true
         UITabBar.appearance().backgroundColor = UIColor(Color.tabBg)
         UITabBar.appearance().unselectedItemTintColor = UIColor(Color.tabUnselect)
     }
     
     var body: some View {
+<<<<<<< HEAD
         TabView(selection: $selection) {
             WeatherSummaryView(location: location, city: city).tabItem {
                 Label("Home", systemImage: "house")
-            }.tag(1).onReceive(timer) { timer in
-                if let weather = location.weatherData {
-                    let currentLocation = weather.name
-                    location.getWeather(at: currentLocation)
-                }
-            }
+            }.tag(1)
             
             SavedWeatherView().tabItem {
                 Label("Saved", systemImage: "heart.fill")
@@ -69,6 +60,60 @@ struct ContentView: View {
 }
 
 #if DEBUG
+=======
+        
+        GeometryReader { geometry in
+            VStack {
+                if test.isLoading {
+                    LoadingView(text: "Loading. . .")
+                    NavigationView {
+                        /*VStack {
+                            Text("Next View")
+                            NavigationLink(destination: WeatherView()){
+                                Text("Do Something")
+                            }
+                        }*/
+                    }
+                } else {
+                    Text(test.weatherData?.name ?? "NO")
+                        .font(.system(size: 36, weight: .bold, design: .default))
+                        .foregroundColor(Color.fgPrimary)
+                        .padding(.bottom, 4)
+                    
+                    Text(String(test.weatherData?.main?.temp ?? 0.0))
+                        .font(.system(size: 20, weight: .light, design: .default))
+                        .foregroundColor(Color.fgPrimary)
+                }
+            }/*.frame(width: geometry.size.width, height: geometry.size.height, alignment: .center).background(Color.black)*/
+        }
+    }
+}
+
+class DeviceLocation : NSObject {
+
+}
+
+/*struct WeatherView: View {
+
+    var body: some View{
+        Text("Placeholder")
+    }
+    
+}*/
+
+extension CLLocationManager: CLLocationManagerDelegate {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+    }
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+          if (status == .denied) {
+              // Show Bat Cave weather
+          }
+    }
+}
+
+>>>>>>> f83995cbc867abf0fd3a0e3e047445661311d3ec
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
