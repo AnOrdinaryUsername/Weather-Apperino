@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchAndSaveView: View {
     @ObservedObject var location: DeviceLocation
+    @ObservedObject var storage: LocalData
     @State var city: String
     
     var body: some View {
@@ -39,8 +40,11 @@ struct SearchAndSaveView: View {
             
             // TODO: Make this a button and add save button functionality
             Button(action: {
-               print("temp")
-
+                if let forecastData = location.forecastData {
+                    if let weatherData = location.weatherData {
+                        storage.saveLocationWeather(forecastData, weatherData)
+                    }
+                }
             }) {
                 Image(systemName: "heart.fill")
                     .resizable()

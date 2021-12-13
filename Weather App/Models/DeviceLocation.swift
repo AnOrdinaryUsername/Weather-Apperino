@@ -43,7 +43,7 @@ class DeviceLocation: NSObject, ObservableObject {
             self.weatherData = searchedCity
         }
         
-        locationWeather.grabForecastData(at: (self.weatherData!.coord!.lat!, self.weatherData!.coord!.lon!)) {
+        locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon)) {
             forecast in
             self.forecastData = forecast
         }
@@ -67,7 +67,7 @@ extension DeviceLocation: CLLocationManagerDelegate {
                 self.weatherData = batCave
             }
             
-            locationWeather.grabForecastData(at: (self.weatherData!.coord!.lat!, self.weatherData!.coord!.lon!)) {
+            locationWeather.grabForecastData(at: (self.weatherData!.coord.lat, self.weatherData!.coord.lon)) {
                 forecast in
                 self.forecastData = forecast
             }

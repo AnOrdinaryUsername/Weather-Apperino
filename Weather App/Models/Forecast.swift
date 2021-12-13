@@ -20,7 +20,7 @@ let apiKey = "imperial&appid=7da6d65192a91313e2d8bf49ef2c7533"
 let Url = "\(baseURL)\(areaWithNoSpaces)&exclude=current,minutely,alerts&units=\(apiKey)"
 
 // MARK: - Forecast
-struct Forecast: Codable {
+struct Forecast: Codable, Hashable {
     let lat, lon: Double
     let hourly: [Hourly]
     let daily: [Daily]
