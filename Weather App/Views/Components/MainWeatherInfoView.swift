@@ -27,7 +27,7 @@ struct MainWeatherInfoView: View {
                         
                         Text("\(roundAndRemoveDecimals(temperature))°F")
                             .font(.system(size: 48))
-                    }.alignmentGuide(.leading, computeValue: { d in 120.0 })
+                    }.alignmentGuide(.leading, computeValue: { d in 100.0 })
                         .foregroundColor(Color.fgPrimary)
                         .padding(0)
                         .zIndex(1)

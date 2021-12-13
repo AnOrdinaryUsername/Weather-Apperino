@@ -28,6 +28,23 @@ func convertToHourly(_ unixTimestamp: Int) -> String {
     return localDate
 }
 
+// https://stackoverflow.com/a/51165535
+func convertToDay(_ unixTimestamp: Int) -> String {
+    let date = Date(timeIntervalSince1970: Double(unixTimestamp))
+    var cal = Calendar(identifier: .gregorian)
+    
+    if let tz = TimeZone(identifier:  TimeZone.current.identifier) {
+                cal.timeZone = tz
+            }
+            // Get the weekday for the given timezone.
+            // Subtract 1 to convert from 1-7 to 0-6
+            // Normalize to 0-6 using % 7
+            let weekday = (cal.component(.weekday, from: date)  - 1) % 7
+
+            // Get the weekday name for the user's locale
+            return Calendar.current.weekdaySymbols[weekday]
+}
+
 func roundAndRemoveDecimals(_ number: Double) -> String {
     let roundedString = String(format: "%.0f", number.rounded())
     return roundedString

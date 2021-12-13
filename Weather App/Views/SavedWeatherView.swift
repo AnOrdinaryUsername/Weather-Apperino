@@ -28,7 +28,9 @@ struct SavedWeatherView: View {
                     NavigationLink(destination: Text("Content")) {
                         Text("link to view")
                     }.navigationTitle("Saved Weather")
-                }.frame(width: geometry.size.width, height: geometry.size.height, alignment: .center).padding(0).background(Color.bg)
+                }.frame(minWidth: geometry.size.width, minHeight: geometry.size.height)
+                    .padding(0)
+                    .background(Color.bg)
             }
         // Without .navigationViewStyle(), warnings will appear in the
         // console saying "Unable to satisfy constraints".
