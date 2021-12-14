@@ -8,29 +8,30 @@
 import SwiftUI
 
 struct LoadingView: View {
+    @State private var isLoading = false
     
-    var text: String
+       var body: some View {
+           ZStack {
+               Text("Loading")
+                   .font(.system(size: 36, design: .rounded))
+                   .foregroundColor(Color.fgPrimary)
+                   .bold()
+                   .offset(x: 0, y: -35)
     
-    var body: some View {
-        Spacer()
-        Spacer()
-        Spacer()
-        Spacer()
-        Spacer()
-        
-        HStack{
-            VStack(spacing: -10) {
-                Text("Fullerton, CA")
-                    .font(.system(size: 35))
-                Text("MM/DD/YY")
-                    .padding()
-                Text("70°F")
-                    .font(.system(size: 60))
-            }.frame(width: 350, height: 200, alignment: .leading)
-            Text("🌤")
-                //.font(.system(size: 100))
-        }
-    }
+               RoundedRectangle(cornerRadius: 3)
+                   .stroke(Color(.systemGray5), lineWidth: 3)
+                   .frame(width: 150, height: 3)
+
+               RoundedRectangle(cornerRadius: 3)
+                   .stroke(Color.green, lineWidth: 3)
+                   .frame(width: 30, height: 3)
+                   .offset(x: isLoading ? 66 : -66, y: 0)
+                   .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+           }
+           .onAppear() {
+               self.isLoading = true
+           }
+       }
 }
 
 
