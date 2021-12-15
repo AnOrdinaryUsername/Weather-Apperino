@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  An iOS app made with SwiftUI for displaying weather data using the <a href="https://openweathermap.org/api">OpenWeatherMap API</a>
+  An iOS app made with SwiftUI for displaying weather data using the <a href="https://openweathermap.org/api">OpenWeatherMap API</a>.
 </p>
 
 <div align="center">
@@ -12,17 +12,16 @@
 
 ## 💾 Data Persistence
 
-Using the FileManager + JSONEncoder API, saved data gets serialized and stored in a JSON file for storage. Here's an [example](https://stackoverflow.com/a/64160308) from SO on how to achieve thiss.
-![146113636-3f08b3e5-c132-4574-b1e8-44ec12c4a624](https://user-images.githubusercontent.com/57053268/146114340-aa1c107e-8972-4acc-bc5c-4339326afc81.gif)
+Using the FileManager + JSONEncoder API, saved data gets serialized and stored in a JSON file for storage and future retrieval.
 
 ## ✔️ Checklist
 
- - [ X ] Make the title screen
- - [ X ] Create a home screen based on current location
- - [ X ] Add search functionality
- - [ X ] Add save location weather for that specific time/date
- - [ X ] Make the summary view
+ - [x] Make the title screen
+ - [x] Create a home screen based on current location
+ - [x] Add search functionality
+ - [x] Add save location weather for that specific time/date
+ - [x] Make the summary view
  
 ## Contributing
 
-Please see [contributing.md](https://github.com/AnOrdinaryUsername/Weather-Apperino/blob/master/contributing.md).![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/57053268/146113618-784fabe1-5184-4294-991b-87803311f458.gif)
+Please see [contributing.md](https://github.com/AnOrdinaryUsername/Weather-Apperino/blob/master/contributing.md).
